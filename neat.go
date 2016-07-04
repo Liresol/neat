@@ -83,15 +83,19 @@ func Iterate(settings *Settings, n int, dcode Decoder, popEval PopEval, orgEval 
 		} else {
 
 			// Determine if the search should switch to decomplexifying
-			if cmplx {}
+			if cmplx {
 			mpc := population.MPC()
 			cmplx = (settings.PruneThreshold > 0) && (mpc < pth)
 			} else {
-				m = population.MPC()
-				if nochg > settings.PruneFloor {
+				//Comments from forker:
+				//mpc (originally called "m") is apparently not used here, and nochg is undefined. Not sure as to meaning yet.
+
+				/*
+				mpc := population.MPC()
+				if nochg > settings.PruneThreshold {
 					cmplx = true
 				}
-				
+				*/
 			}
 			if cmplx {
 				settings.MutateAddNode = addNode

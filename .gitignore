@@ -1,2 +1,14 @@
 
 .DS_Store
+
+#From the forker to figure out the code
+debug
+
+#Using Vim editor
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
