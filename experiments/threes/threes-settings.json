@@ -1,0 +1,28 @@
+{
+    "BiasCount": 1, 
+    "InputCount": 255, 
+    "OutputCount": 4, 
+
+    "PopulationSize": 3000, 
+    "ExcessCoefficient": 1.0, 
+    "DisjointCoefficient": 1.0, 
+    "WeightCoefficient": 2.0,
+    "CompatThreshold": 6.0, 
+    "AgeToStagnation": 20, 
+
+    "MutateAddConnection": 0.3, 
+    "MutateAddNode": 0.02, 
+    "MutateEnabled": 0.01, 
+    "MutateWeight": 0.5, 
+    "MutateWeightNew": 0.1,     
+    "Crossover": 0.75, 
+    "InterspeciesMating": 0.001, 
+    "PruneThreshold": 6969,
+
+    "EliteCount": 1, 
+    "MutateFuncType": 0.0, 
+    "SurvivalPercent": 0.2, 
+
+    "ArchiveFrequency": 4
+	
+}
