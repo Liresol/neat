@@ -38,6 +38,13 @@ func (g *Game) Initialize() {
 	g.UpdateNextCard()
 }
 
+func (g *Game) SeedInit(i int) {
+	rand.Seed(int64(i))
+	g.ReloadDeck()
+	g.InitializeBoard()
+	g.UpdateNextCard()
+}
+
 func shuffle(t []Three) ([]Three) {
 	iter := 0
 	for iter < 2 {
@@ -92,6 +99,38 @@ func (g *Game) UpdateNextCard() {
 			g.nextCard.target = buf
 		}
 	}
+}
+
+func (g *Game) PeekNextCard() Three {
+	return g.nextCard.target
+}
+
+func (g *Game) TestDeck() bool {
+	count1 := 0
+	count2 := 0
+	count3 := 0
+	for _, c := range g.deck {
+		switch c {
+		case GetThree(1):
+			count1++
+		case GetThree(2):
+			count2++
+		case GetThree(3):
+			count3++
+		default:
+			return false
+		}
+	}
+	if count1 > 4 || count2 > 4 || count3 > 4 {
+		return false
+	}
+	/*
+	fmt.Println(count1)
+	fmt.Println(count2)
+	fmt.Println(count3)
+	fmt.Println("--------")
+	*/
+	return true
 }
 
 func createCards (num int, numOfThree int) []*Card {

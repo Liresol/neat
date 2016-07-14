@@ -3,7 +3,7 @@
     "InputCount": 255, 
     "OutputCount": 4, 
 
-    "PopulationSize": 3000, 
+    "PopulationSize": 1500, 
     "ExcessCoefficient": 1.0, 
     "DisjointCoefficient": 1.0, 
     "WeightCoefficient": 2.0,
@@ -23,6 +23,6 @@
     "MutateFuncType": 0.0, 
     "SurvivalPercent": 0.2, 
 
-    "ArchiveFrequency": 4
+    "ArchiveFrequency": 3
 	
 }

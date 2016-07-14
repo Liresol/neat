@@ -2,10 +2,10 @@ package main
 
 import (
 	"errors"
-	"github.com/boggo/neat/experiments/threes/libthrees"
 	"github.com/boggo/neat"
 	"github.com/boggo/neat/archiver"
 	"github.com/boggo/neat/decoder"
+	"github.com/boggo/neat/experiments/threes/libthrees"
 	"github.com/boggo/neat/popeval"
 	"github.com/boggo/neat/reporter"
 	"github.com/boggo/neat/settings"
@@ -26,6 +26,7 @@ var (
 )
 
 type threesEval struct{}
+
 //0 is Down
 //1 is Up
 //2 is Right
@@ -64,11 +65,13 @@ func (eval threesEval) Evaluate(org *neat.Organism) (err error) {
 	var g libthrees.Game
 
 	fitness := float64(0)
-	numtests := 25
+	numtests := 100
 
-	for trials := 0; trials < numtests ; trials++ {
+	for trials := 0; trials < numtests; trials++ {
 		g = libthrees.Game{}
-		g.Initialize()
+		//Causes the games to be deterministic.
+		g.SeedInit(4761+trials)
+		//g.Initialize()
 		for !g.IsOver() {
 			//255 inputs
 			inputs := g.GetFloatState()
@@ -78,25 +81,32 @@ func (eval threesEval) Evaluate(org *neat.Organism) (err error) {
 				org.Fitness = []float64{0}
 				return
 			}
-			priority := action
+			//fmt.Println(action)
+			var priority []float64
+			for _, i := range action {
+				priority = append(priority, i)
+			}
 			sort.Float64s(priority)
+			//fmt.Println(priority)
+			//fmt.Println(action)
+			//fmt.Println(priority)
 			for i := 0; i < 4; i++ {
 				j := 0
 				for j = 0; j < 4; j++ {
-					if(priority[3-i] == action[j]) {
+					if priority[3-i] == action[j] {
 						break
 					}
 				}
-				if g.CanMove(intDir(i)) {
-					g.Move(intDir(i))
+				if g.CanMove(intDir(j)) {
+					g.Move(intDir(j))
 					break
 				}
 			}
 			fitness += 1
 		}
-		g.PrintBoard()
-		fmt.Println("Game Over")
+		//fmt.Println(fitness)
 	}
+	fitness /= float64(numtests)
 	org.Fitness = []float64{fitness}
 	return
 }
@@ -117,11 +127,15 @@ func main() {
 
 	// Create the evaluators
 	o := &threesEval{}
-	p := popeval.NewConcurrent()
+	/*
+		*The threes game is not concurrent-safe.
+		p := popeval.NewConcurrent()
+	*/
+	p := popeval.NewSerial()
 
 	// Create the decoder
 	d := decoder.NewNEAT()
 
 	// Iterate the experiment
-	neat.Iterate(s, 2, d, p, o, a, r)
+	neat.Iterate(s, 100, d, p, o, a, r)
 }

@@ -43,6 +43,26 @@ type PopEval interface {
 	Evaluate(pop *Population, orgEval OrgEval) (err error)
 }
 
+/*
+func SkrewOver(settings *Settings, n int, rep Reporter) {
+	var population *Population
+	population, err = initialPopulation(settings, inno)
+
+	inno := newInnovation(population)
+	defer inno.close()
+
+	// Archive the population
+	if arch != nil && (i == n-1 ||
+		(settings.ArchiveFrequency == 0 || i%settings.ArchiveFrequency == 0)) {
+		err = arch.Archive(population)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+}
+*/
+
 func Iterate(settings *Settings, n int, dcode Decoder, popEval PopEval, orgEval OrgEval, arch Archiver, rep Reporter) {
 
 	var err error
@@ -84,18 +104,23 @@ func Iterate(settings *Settings, n int, dcode Decoder, popEval PopEval, orgEval 
 
 			// Determine if the search should switch to decomplexifying
 			if cmplx {
+				//Checking for the threes experiment.
+				fmt.Println("Debug")
 			mpc := population.MPC()
 			cmplx = (settings.PruneThreshold > 0) && (mpc < pth)
 			} else {
 				//Comments from forker:
-				//mpc (originally called "m") is apparently not used here, and nochg is undefined. Not sure as to meaning yet.
+				//mpc (originally called "m") is apparently not used here, and nochg is undefined and compared against PruneFloor. Not sure as to meaning yet.
 
-				/*
 				mpc := population.MPC()
-				if nochg > settings.PruneThreshold {
+				/*
+				if nochg > settings.PruneFloor {
 					cmplx = true
 				}
 				*/
+				if mpc < pth {
+					cmplx = true
+				}
 			}
 			if cmplx {
 				settings.MutateAddNode = addNode
